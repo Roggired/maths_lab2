@@ -25,8 +25,9 @@ class WelcomeScene : Scene {
         println("If you want to use default equation, write \"DEFAULT\".")
         println("If you want to use an equation from a file, write \"FILE HERE_WRITE_FILE_NAME\"")
         println("If you want to type an equation, just write it")
+        println("If you want to exit, type EXIT")
         println()
 
-        sceneContext.router.switch(sceneContext, "UserInput")
+        sceneContext.router.switch(sceneContext, "SwitchMode")
     }
 }

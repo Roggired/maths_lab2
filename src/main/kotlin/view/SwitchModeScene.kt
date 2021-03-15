@@ -1,6 +1,6 @@
 package view
 
-class UserInputScene : Scene {
+class SwitchModeScene : Scene {
     override fun start(sceneContext: SceneContext) {
         println("I am waiting for your input:")
 
@@ -16,6 +16,11 @@ class UserInputScene : Scene {
             }
 
             val option = userInput.trim();
+
+            if (option == "EXIT") {
+                println("Good bye!")
+                return
+            }
 
             if (option == "DEFAULT") {
                 targetRoute = "DefaultEquation"

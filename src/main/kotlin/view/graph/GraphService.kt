@@ -2,7 +2,7 @@ package view.graph
 
 import javafx.collections.ObservableList
 import javafx.scene.chart.XYChart
-import model.Equation
+import model.equation.Equation
 import tornadofx.Controller
 import tornadofx.toObservable
 

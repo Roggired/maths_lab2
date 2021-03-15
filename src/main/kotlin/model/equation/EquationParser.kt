@@ -1,9 +1,15 @@
-package model
+package model.equation
 
+import java.io.PrintWriter
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
 
+fun main() {
+    val io = PrintWriter(System.out)
+    io.println("%10.5f".format(3.123456789))
+    io.flush()
+}
 fun createEquationFrom(string: String): Equation {
     val terms: ArrayList<Term> = ArrayList()
 

@@ -6,8 +6,8 @@ import javafx.collections.ObservableList
 import javafx.scene.Cursor
 import javafx.scene.chart.NumberAxis
 import javafx.scene.chart.XYChart
-import model.Equation
-import model.createEquationFrom
+import model.equation.Equation
+import model.equation.createEquationFrom
 import tornadofx.*
 
 class GraphView : View("WoW! It is a graph") {

@@ -1,4 +1,4 @@
-package model
+package model.equation
 
 import kotlin.math.abs
 import kotlin.math.log
@@ -61,7 +61,7 @@ class Sign(private val value: String) {
 }
 
 abstract class Term(
-    protected val sign: model.Sign,
+    protected val sign: Sign,
     protected val factor: Double
 ) {
     abstract fun evaluate(x: Double): Double
@@ -71,7 +71,7 @@ abstract class Term(
 }
 
 class LinearTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double
 ): Term(sign, factor) {
     override fun evaluate(x: Double): Double {
@@ -89,7 +89,7 @@ class ConstantTerm(
 }
 
 abstract class ComplexTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double,
     protected val baseTerm: Term
 ): Term(sign, factor) {
@@ -99,7 +99,7 @@ abstract class ComplexTerm(
 }
 
 class AbsTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double,
     baseTerm: Term
 ): ComplexTerm(sign, factor, baseTerm) {
@@ -109,7 +109,7 @@ class AbsTerm(
 }
 
 class PolynomialTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double,
     baseTerm: Term,
     private val power: Double
@@ -124,7 +124,7 @@ class PolynomialTerm(
 }
 
 class TrigonometricTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double,
     baseTerm: Term,
     private val function: (x: Double) -> Double
@@ -143,7 +143,7 @@ fun ctg(x: Double): Double {
 }
 
 class LogarithmicTerm(
-    sign: model.Sign,
+    sign: Sign,
     factor: Double,
     baseTerm: Term,
     private val logBase: Double
