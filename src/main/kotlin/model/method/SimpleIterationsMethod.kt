@@ -14,6 +14,7 @@ class SimpleIterationsMethod(
 ): Method(equation, leftBound, rightBound, accuracy) {
     private val solutions = ArrayList<Double>()
     private val convergenceCondition = getConvergenceCondition()
+    private var step = 1
 
 
     override fun getTable(): ArrayList<Array<String>> {
@@ -25,7 +26,6 @@ class SimpleIterationsMethod(
         var fxk = equation.evaluate(xk)
         var xk_next = phiEquation.evaluate(xk)
         var dif = abs(xk_next - xk)
-        var step = 1
         addToTable(step, xk, fxk, xk_next, dif, table)
         addToSolutions(xk, fxk, dif)
 
@@ -63,4 +63,6 @@ class SimpleIterationsMethod(
         (abs(fxk) <= accuracy || dif <= accuracy) && !solutions.contains(xk) && solutions.add(xk)
 
     override fun getSolutions(): ArrayList<Double> = solutions
+
+    override fun getStepQuantity(): Int = step
 }

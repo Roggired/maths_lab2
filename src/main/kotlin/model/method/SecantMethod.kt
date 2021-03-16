@@ -13,7 +13,7 @@ class SecantMethod(
     accuracy: Double
 ): Method(equation, leftBound, rightBound, accuracy) {
     private val solutions: ArrayList<Double> = ArrayList()
-
+    private var step = 1
 
     override fun getTable(): ArrayList<Array<String>> {
         val table = ArrayList<Array<String>>()
@@ -25,7 +25,6 @@ class SecantMethod(
         var fxk_1 = equation.evaluate(xk_1)
         var fxk = equation.evaluate(xk)
         var dif = abs(xk - xk_1)
-        var step = 1
         var xk_next: Double = xk
         var fxk_next: Double = fxk
 
@@ -69,4 +68,6 @@ class SecantMethod(
         (abs(fxk_next) <= accuracy || dif <= accuracy) && !solutions.contains(xk_next) && solutions.add(xk_next)
 
     override fun getSolutions(): ArrayList<Double> = solutions
+
+    override fun getStepQuantity(): Int = step
 }

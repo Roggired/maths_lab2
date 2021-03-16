@@ -11,4 +11,6 @@ abstract class Method(
     abstract fun getTable(): ArrayList<Array<String>>
 
     abstract fun getSolutions(): ArrayList<Double>
+
+    abstract fun getStepQuantity(): Int
 }

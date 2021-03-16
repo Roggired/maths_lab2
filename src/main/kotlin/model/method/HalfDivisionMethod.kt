@@ -11,17 +11,18 @@ class HalfDivisionMethod(
     accuracy: Double
 ): Method(equation, leftBound, rightBound, accuracy) {
     private val solutions: ArrayList<Double> = ArrayList()
+    private var step = 1
 
 
     override fun getTable(): ArrayList<Array<String>> {
         val table: ArrayList<Array<String>> = ArrayList()
         val titles = arrayOf("Step №", "a", "b", "x", "f(a)", "f(b)", "f(x)", "|b-a|")
         table.add(titles)
-        calcInRange(leftBound, rightBound, table, 1)
+        calcInRange(leftBound, rightBound, table)
         return table
     }
 
-    private fun calcInRange(a: Double, b: Double, table: ArrayList<Array<String>>, step: Int): Int {
+    private fun calcInRange(a: Double, b: Double, table: ArrayList<Array<String>>): Int {
         var a = a
         var b = b
         var x = (a + b) / 2
@@ -32,7 +33,6 @@ class HalfDivisionMethod(
         var signOnAB = fa.sign * fb.sign
         addToTable(step, a, fa, b, fb, x, fx, dif, table)
         addSolutions(a, fa, b, fb, x, fx, dif)
-        var step = step
 
         while (dif > accuracy && abs(fx) > accuracy && signOnAB <= 0) {
             step++
@@ -40,8 +40,8 @@ class HalfDivisionMethod(
             val rightSign = fx.sign * fb.sign
 
             if (leftSign <= 0 && rightSign <= 0) {
-                step = calcInRange(a, x, table, step)
-                step = calcInRange(x, b, table, step)
+                step = calcInRange(a, x, table)
+                step = calcInRange(x, b, table)
                 return step
             }
 
@@ -80,4 +80,6 @@ class HalfDivisionMethod(
     override fun getSolutions(): ArrayList<Double> {
         return solutions
     }
+
+    override fun getStepQuantity(): Int = step
 }

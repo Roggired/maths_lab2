@@ -107,8 +107,12 @@ class SimpleIterationsMethodScene: MethodScene() {
 
             printWriter.println()
             printWriter.println("Simple iterations method solution on: ${isolationBorders.first} ${isolationBorders.second}")
-
             MethodPresenter.presentSolutions(method.getSolutions(), printWriter)
+
+            printWriter.println()
+            printWriter.println("Iterations quantity: ${method.getStepQuantity()}")
+            printWriter.println()
+            printWriter.flush()
         }
     }
 }
