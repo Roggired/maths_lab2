@@ -6,10 +6,10 @@ import kotlin.math.sign
 
 class HalfDivisionMethod(
     equation: Equation,
-    private val leftBound: Double,
-    private val rightBound: Double,
-    private val accuracy: Double
-): Method(equation) {
+    leftBound: Double,
+    rightBound: Double,
+    accuracy: Double
+): Method(equation, leftBound, rightBound, accuracy) {
     private val solutions: ArrayList<Double> = ArrayList()
 
 

@@ -22,9 +22,9 @@ class WelcomeScene : Scene {
         println("1.78x+sin(x)")
         println("2.8x+log^2(sin(x))")
         println()
-        println("If you want to use default equation, write \"DEFAULT\".")
-        println("If you want to use an equation from a file, write \"FILE HERE_WRITE_FILE_NAME\"")
-        println("If you want to type an equation, just write it")
+        println("If you want to use default equation, write \"DEFAULT\"")
+        println("If you want to use an equation from a file, write \"FILE FILE NAME HERE\"")
+        println("If you want to type an equation, write \"CONSOLE EQUATION HERE\"")
         println("If you want to exit, type EXIT")
         println()
 

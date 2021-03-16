@@ -4,7 +4,7 @@ class SwitchModeScene : Scene {
     override fun start(sceneContext: SceneContext) {
         println("I am waiting for your input:")
 
-        val targetRoute: String?
+        var targetRoute: String?
 
         while (true) {
             val userInput = readLine()
@@ -29,18 +29,30 @@ class SwitchModeScene : Scene {
 
             if (option.startsWith("FILE")) {
                 targetRoute = "FileEquation"
-                break
+                try {
+                    sceneContext.data["fileName"] = option.split(" ")[1]
+                    break
+                } catch (e: Throwable) {
+                    println("Seems like you have forgotten to specify the file name. Please, write:")
+                    continue
+                }
             }
 
-            if (option.contains('=')) {
+            if (option.startsWith("CONSOLE")) {
                 targetRoute = "ConsoleEquation"
-                break
+                try {
+                    sceneContext.equation = option.split(" ")[1]
+                    break
+                } catch (e: Throwable) {
+                    println("Seems like you have forgotten to specify the equation. Please, write:")
+                    continue
+                }
             }
 
             println()
             println("Oops! You have written something that, unfortunately, I can't understand :( Please, write again:")
         }
 
-        sceneContext.router.switch(sceneContext, targetRoute ?: "UserInput")
+        sceneContext.router.switch(sceneContext, targetRoute ?: "Welcome")
     }
 }
