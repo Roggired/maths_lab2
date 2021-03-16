@@ -14,7 +14,7 @@ class WelcomeScene : Scene {
         println("4. To specify a power for a polynomial function use \"^\".")
         println("5. You can apply a function only to one another functions. Sums, differences and staff are not allowed yet. ")
         println("6. To specify a logarithmic function write \"log^\" and add a base.")
-        println("7. Doubles can be specified with both \".\" and \",\".")
+        println("7. Doubles can be specified only with \".\".")
         println("8. DO NOT use any tabs or spaces.")
         println("9. Free member of an equation has to be the last term.")
         println()
