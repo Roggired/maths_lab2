@@ -6,10 +6,9 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 fun main() {
-    val io = PrintWriter(System.out)
-    io.println("%10.5f".format(3.123456789))
-    io.flush()
+    println(createEquationFrom("2x+1.2").evaluate(0.0))
 }
+
 fun createEquationFrom(string: String): Equation {
     val terms: ArrayList<Term> = ArrayList()
 

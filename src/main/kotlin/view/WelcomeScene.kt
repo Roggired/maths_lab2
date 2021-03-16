@@ -16,6 +16,7 @@ class WelcomeScene : Scene {
         println("6. To specify a logarithmic function write \"log^\" and add a base.")
         println("7. Doubles can be specified with both \".\" and \",\".")
         println("8. DO NOT use any tabs or spaces.")
+        println("9. Free member of an equation has to be the last term.")
         println()
         println("EXAMPLES OF CORRECT EQUATIONS:")
         println("x+x^2")

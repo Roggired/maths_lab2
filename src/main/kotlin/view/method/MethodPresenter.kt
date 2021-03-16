@@ -9,7 +9,7 @@ class MethodPresenter {
                 it.forEach {
                     try {
                         val double = it.toDouble()
-                        io.print("%15.5f".format(double))
+                        io.print("%15.3f".format(double))
                     } catch (e: Throwable) {
                         io.print("%15s".format(it))
                     }
@@ -21,7 +21,7 @@ class MethodPresenter {
 
         fun presentSolutions(solutions: ArrayList<Double>, io: PrintWriter) {
             solutions.forEach {
-                io.print("%10.5f".format(it))
+                io.print("%15.3f".format(it))
             }
             io.println()
             io.flush()

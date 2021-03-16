@@ -2,7 +2,7 @@ package view
 
 class SwitchMethodScene: Scene {
     override fun start(sceneContext: SceneContext) {
-        println("Now chose a method (1, 4, 5):")
+        println("Now choose a method (1, 4, 5):")
         println()
 
         var route = ""

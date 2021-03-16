@@ -1,9 +1,9 @@
-package view
+package view.method
 
 import model.equation.Equation
 import model.equation.createEquationFrom
 import model.method.SecantMethod
-import view.method.MethodPresenter
+import view.SceneContext
 import java.io.PrintWriter
 import kotlin.math.sign
 
@@ -52,9 +52,6 @@ class SecantMethodScene: MethodScene() {
 
                 break
             }
-
-            val temp1 = equation.evaluate(isolationBorders.first)
-            val temp2 = equation.evaluate(isolationBorders.second)
 
             if (equation.evaluate(isolationBorders.second).sign * secondDerivativeValueInRightBound.sign < 0 &&
                     equation.evaluate(isolationBorders.first).sign * secondDerivativeValueInLeftBound.sign < 0) {

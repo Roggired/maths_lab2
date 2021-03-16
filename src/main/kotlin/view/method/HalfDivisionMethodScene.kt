@@ -1,8 +1,8 @@
-package view
+package view.method
 
 import model.equation.createEquationFrom
 import model.method.HalfDivisionMethod
-import view.method.MethodPresenter
+import view.SceneContext
 import java.io.PrintWriter
 
 class HalfDivisionMethodScene: MethodScene() {

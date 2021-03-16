@@ -1,6 +1,8 @@
-package view
+package view.method
 
 import model.equation.Equation
+import view.Scene
+import view.SceneContext
 import kotlin.math.sign
 
 abstract class MethodScene: Scene {
