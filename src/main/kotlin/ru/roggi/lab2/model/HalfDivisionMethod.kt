@@ -1,6 +1,6 @@
-package model.method
+package ru.roggi.lab2.model
 
-import model.equation.Equation
+import ru.roggi.comp.math.model.Equation
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -15,6 +15,10 @@ class HalfDivisionMethod(
 
 
     override fun getTable(): ArrayList<Array<String>> {
+        if (equation.evaluate(leftBound).sign * equation.evaluate(rightBound).sign > 0) {
+            throw MethodException()
+        }
+
         val table: ArrayList<Array<String>> = ArrayList()
         val titles = arrayOf("Step №", "a", "b", "x", "f(a)", "f(b)", "f(x)", "|b-a|")
         table.add(titles)

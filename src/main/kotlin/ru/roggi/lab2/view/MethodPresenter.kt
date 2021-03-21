@@ -1,4 +1,4 @@
-package view.method
+package ru.roggi.lab2.view
 
 import java.io.PrintWriter
 

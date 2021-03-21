@@ -1,6 +1,6 @@
-package model.method
+package ru.roggi.lab2.model
 
-import model.equation.Equation
+import ru.roggi.comp.math.model.Equation
 import kotlin.math.abs
 import kotlin.math.sign
 

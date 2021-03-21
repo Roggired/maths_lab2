@@ -19,6 +19,8 @@ javafx {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation group: 'no.tornado', name: 'tornadofx', version: '1.7.20'
+    implementation files("libs/console-application-1.0.jar", "libs/easy-comp-math-1.0.jar")
+    implementation "org.reflections:reflections:0.9.12"
 }
 
 compileKotlin {

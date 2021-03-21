@@ -1,6 +1,6 @@
-package model.method
+package ru.roggi.lab2.model
 
-import model.equation.Equation
+import ru.roggi.comp.math.model.Equation
 
 abstract class Method(
     protected val equation: Equation,
