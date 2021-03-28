@@ -2,6 +2,7 @@ package ru.roggi.lab2
 
 import ru.roggi.comp.math.EasyCompMath
 import ru.roggi.comp.math.utils.RouterBuilder
+import ru.roggi.comp.math.view.InputScene
 import ru.roggi.comp.math.view.InputTwoScene
 import ru.roggi.console.application.view.scene.ChooseScene
 import ru.roggi.console.application.view.scene.Router
@@ -13,6 +14,7 @@ import tornadofx.launch
 
 
 const val INPUT_METHOD_BOUNDS_ROUTE = "methodBounds"
+const val INPUT_FILE_NAME_ROUTE = "inputFileName"
 
 
 class RouterBuilderImpl: RouterBuilder {
@@ -51,6 +53,11 @@ class RouterBuilderImpl: RouterBuilder {
                 register("simpleIterations", MethodScene(
                     "Simple iterations"
                 ) { SimpleIterationsMethod(it.equation, it.leftBound, it.rightBound, it.accuracy) })
+                register("inputFileName", InputScene(
+                    "Please, enter file name:",
+                    String::toString,
+                    { true }
+                ))
             }
 }
 
