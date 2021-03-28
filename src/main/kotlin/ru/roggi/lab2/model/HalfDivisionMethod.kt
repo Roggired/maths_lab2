@@ -10,23 +10,21 @@ class HalfDivisionMethod(
     rightBound: Double,
     accuracy: Double
 ): Method(equation, leftBound, rightBound, accuracy) {
+    private val table: ArrayList<Array<String>> = ArrayList()
     private val solutions: ArrayList<Double> = ArrayList()
     private var step = 1
 
 
-    override fun getTable(): ArrayList<Array<String>> {
-        if (equation.evaluate(leftBound).sign * equation.evaluate(rightBound).sign > 0) {
-            throw MethodException()
-        }
+    init {
+        validateIsolationInterval()
 
-        val table: ArrayList<Array<String>> = ArrayList()
         val titles = arrayOf("Step №", "a", "b", "x", "f(a)", "f(b)", "f(x)", "|b-a|")
         table.add(titles)
-        calcInRange(leftBound, rightBound, table)
-        return table
+        calcInRange(leftBound, rightBound)
     }
 
-    private fun calcInRange(a: Double, b: Double, table: ArrayList<Array<String>>): Int {
+
+    private fun calcInRange(a: Double, b: Double): Int {
         var a = a
         var b = b
         var x = (a + b) / 2
@@ -34,29 +32,31 @@ class HalfDivisionMethod(
         var fa = equation.evaluate(a)
         var fb = equation.evaluate(b)
         var dif = abs(b - a)
-        var signOnAB = fa.sign * fb.sign
-        addToTable(step, a, fa, b, fb, x, fx, dif, table)
+        addToTable(step, a, fa, b, fb, x, fx, dif)
+
+        if (abs(fa) < accuracy) {
+            solutions.add(a)
+            return step
+        }
+
+        if (abs(fb) < accuracy) {
+            solutions.add(b)
+            return step
+        }
+
         addSolutions(a, fa, b, fb, x, fx, dif)
 
-        while (dif > accuracy && abs(fx) > accuracy && signOnAB <= 0) {
+        while (dif >= accuracy && abs(fx) >= accuracy) {
             step++
             val leftSign = fa.sign * fx.sign
             val rightSign = fx.sign * fb.sign
 
-            if (leftSign <= 0 && rightSign <= 0) {
-                step = calcInRange(a, x, table)
-                step = calcInRange(x, b, table)
-                return step
-            }
-
             if (leftSign <= 0) {
-                signOnAB = leftSign
                 b = x
                 fb = fx
             }
 
             if (rightSign <= 0) {
-                signOnAB = rightSign
                 a = x
                 fa = fx
             }
@@ -64,14 +64,14 @@ class HalfDivisionMethod(
             x = (a + b) / 2
             fx = equation.evaluate(x)
             dif = abs(b - a)
-            addToTable(step, a, fa, b, fb, x, fx, dif, table)
+            addToTable(step, a, fa, b, fb, x, fx, dif)
             addSolutions(a, fa, b, fb, x, fx, dif)
         }
 
         return step + 1
     }
 
-    private fun addToTable(step: Int, a: Double, fa: Double, b: Double, fb: Double, x: Double, fx: Double, dif: Double, table: ArrayList<Array<String>>) {
+    private fun addToTable(step: Int, a: Double, fa: Double, b: Double, fb: Double, x: Double, fx: Double, dif: Double) {
         table.add(arrayOf(step.toString(), a.toString(), b.toString(), x.toString(), fa.toString(), fb.toString(), fx.toString(), dif.toString()))
     }
 
@@ -81,9 +81,9 @@ class HalfDivisionMethod(
         if ((abs(fx) <= accuracy || dif <= accuracy) && !solutions.contains(x)) solutions.add(x)
     }
 
-    override fun getSolutions(): ArrayList<Double> {
-        return solutions
-    }
+    override fun getTable(): ArrayList<Array<String>> = table
+
+    override fun getSolutions(): ArrayList<Double> = solutions
 
     override fun getStepQuantity(): Int = step
 }
