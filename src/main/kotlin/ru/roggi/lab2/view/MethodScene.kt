@@ -12,10 +12,10 @@ import ru.roggi.console.application.model.State
 import ru.roggi.console.application.view.scene.SceneContext
 import ru.roggi.console.application.view.scene.StatefulScene
 import ru.roggi.lab2.INPUT_FILE_NAME_ROUTE
-import ru.roggi.lab2.INPUT_METHOD_BOUNDS_ROUTE
-import ru.roggi.lab2.model.InvalidIsolationIntervalException
+import ru.roggi.lab2.model.IsolationIntervalsTable
 import ru.roggi.lab2.model.Method
-import ru.roggi.lab2.model.MethodCannotBeAppliedException
+import ru.roggi.lab2.model.formatIsolationInterval
+import ru.roggi.lab2.model.getFormatBasedOnAccuracy
 
 const val DEFAULT_EQUATION = "-2,7x^3 - 1,48x^2 + 19,23x + 6,35"
 const val SYMBOLS_PER_TABLE_COLUMN = 10
@@ -52,51 +52,95 @@ class MethodScene(
         println("Chosen accuracy: ${"%.${SYMBOLS_AFTER_DOT}f".format(state.accuracy)}")
         println()
 
-        var active = true
-        while (active) {
-            sceneContext.router.switch(INPUT_METHOD_BOUNDS_ROUTE) {
-                it as InputTwoIntent<*, *>
-                state.leftBound = it.a as Double
-                state.rightBound = it.b as Double
+        println("Finding isolation intervals...")
+        val isolationIntervalsTable = IsolationIntervalsTable(state.equation)
+        println()
+        println("Have found intervals:")
+        val isolationIntervals = isolationIntervalsTable.isolationIntervals
+        while (isolationIntervals.hasNext()) {
+            val interval = isolationIntervals.next()
+            println(formatIsolationInterval(interval))
+        }
+
+        println()
+        println("Solving equation for isolation intervals...")
+        println()
+        isolationIntervals.restart()
+        while (isolationIntervals.hasNext()) {
+            val interval = isolationIntervals.next()
+
+            println("For interval: ${formatIsolationInterval(interval)}")
+            println()
+
+            state.leftBound = interval.first
+            state.rightBound = interval.second
+
+            val method = methodBuilder(state)
+            method.getExtraInfo()?.let {
+                println(it)
+                println()
             }
 
-            var method: Method
-            try {
-                method = methodBuilder(state)
-            } catch (e: InvalidIsolationIntervalException) {
-                println("On this isolation interval there are no or more than one solutions.")
-                println("Please, enter isolation interval again:")
-                continue
-            } catch (e: MethodCannotBeAppliedException) {
-                println("On this isolation interval $methodName method cannot be applied.")
-                println("Please, enter isolation interval again:")
-                continue
-            }
+            println(method.getValidationInfo())
+            println()
 
-            println("$methodName method table")
+            println("$methodName method table on isolation interval: ${formatIsolationInterval(interval)}")
             println(Presenter.present(method.getTable(), SYMBOLS_PER_TABLE_COLUMN, SYMBOLS_AFTER_DOT))
             println()
 
-            println("$methodName method solution on: ${state.leftBound} ${state.rightBound}")
+            println("$methodName method solution on isolation interval: ${formatIsolationInterval(interval)}")
             println(presentSolutions(method.getSolutions()))
             println()
 
             println("Iterations quantity: ${method.getStepQuantity()}")
             println()
-
-            sceneContext.put("greetings", "Do you want to find one more solution with $methodName method?")
-            sceneContext.router.switch(YES_NO_ROUTE) {
-                it as YesNoIntent
-                active = it.isYes
-            }
         }
+//        var active = true
+//        while (active) {
+//            sceneContext.router.switch(INPUT_METHOD_BOUNDS_ROUTE) {
+//                it as InputTwoIntent<*, *>
+//                state.leftBound = it.a as Double
+//                state.rightBound = it.b as Double
+//            }
+//
+//            var method: Method
+//            try {
+//                method = methodBuilder(state)
+//            } catch (e: InvalidIsolationIntervalException) {
+//                println("On this isolation interval there are no or more than one solutions.")
+//                println("Please, enter isolation interval again:")
+//                continue
+//            } catch (e: MethodCannotBeAppliedException) {
+//                println("On this isolation interval $methodName method cannot be applied.")
+//                println("Please, enter isolation interval again:")
+//                continue
+//            }
+//
+//            println("$methodName method table")
+//            println(Presenter.present(method.getTable(), SYMBOLS_PER_TABLE_COLUMN, SYMBOLS_AFTER_DOT))
+//            println()
+//
+//            println("$methodName method solution on: ${state.leftBound} ${state.rightBound}")
+//            println(presentSolutions(method.getSolutions()))
+//            println()
+//
+//            println("Iterations quantity: ${method.getStepQuantity()}")
+//            println()
+//
+//            sceneContext.put("greetings", "Do you want to find one more solution with $methodName method?")
+//            sceneContext.router.switch(YES_NO_ROUTE) {
+//                it as YesNoIntent
+//                active = it.isYes
+//            }
+//        }
         sceneContext.router.switch("main")
     }
 
     private fun presentSolutions(solutions: ArrayList<Double>): String {
+        val format = getFormatBasedOnAccuracy(state.accuracy)
         val stringBuilder = StringBuilder()
         solutions.forEach {
-            stringBuilder.append("x=%.${SYMBOLS_AFTER_DOT}f, f(x)=%.${SYMBOLS_AFTER_DOT}f".format(it, state.equation.evaluate(it)))
+            stringBuilder.append("x=$format f(x)=$format".format(it, state.equation.evaluate(it)))
             stringBuilder.append(" ")
         }
         return stringBuilder.toString()

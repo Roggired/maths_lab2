@@ -3,6 +3,7 @@ package ru.roggi.lab2.model
 import ru.roggi.comp.math.model.Equation
 import ru.roggi.comp.math.model.LinearTerm
 import ru.roggi.comp.math.model.Sign
+import ru.roggi.comp.math.view.presenter.Presenter
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -24,10 +25,15 @@ class SimpleIterationsMethod(
     private val phiEquation: Equation
     private val q: Double
 
-
     init {
         phiEquation = findPhiEquation()
         q = findQ()
+
+        extraInfoBuilder.append("phi(x) = ")
+        extraInfoBuilder.append(Presenter.present(phiEquation))
+        extraInfoBuilder.append(System.lineSeparator())
+        extraInfoBuilder.append("q = ${getFormatBasedOnAccuracy(accuracy)}".format(q))
+        extraInfoBuilder.append(System.lineSeparator())
 
         validateIsolationInterval()
         validateMethodCanBeApplied()
@@ -42,7 +48,7 @@ class SimpleIterationsMethod(
         addToTable(step, xk, fxk, xk_next, dif)
         addToSolutions(xk, fxk, dif)
 
-        while (convergenceCondition(xk, xk_next)) {
+        while (convergenceCondition(dif)) {
             step++
 
             xk = xk_next
@@ -69,16 +75,24 @@ class SimpleIterationsMethod(
     private fun findQ(): Double = max(abs(phiEquation.evaluateFirstDerivative(leftBound)), abs(phiEquation.evaluateFirstDerivative(rightBound)))
 
     private fun validateMethodCanBeApplied() {
-        if (abs(phiEquation.evaluateFirstDerivative(leftBound)) >= 1 || abs(phiEquation.evaluateFirstDerivative(rightBound)) >= 1) {
+        val format = getFormatBasedOnAccuracy(accuracy)
+        val phiEquationFirstDerivativeValueInLeftBound = phiEquation.evaluateFirstDerivative(leftBound)
+        validationInfoBuilder.append("phi'($format) = $format".format(leftBound, phiEquationFirstDerivativeValueInLeftBound))
+        validationInfoBuilder.append(System.lineSeparator())
+        val phiEquationFirstDerivativeValueInRightBound = phiEquation.evaluateFirstDerivative(rightBound)
+        validationInfoBuilder.append("phi'($format) = $format".format(rightBound, phiEquationFirstDerivativeValueInRightBound))
+        validationInfoBuilder.append(System.lineSeparator())
+
+        if (abs(phiEquationFirstDerivativeValueInLeftBound) >= 1 || abs(phiEquationFirstDerivativeValueInRightBound) >= 1) {
             throw MethodCannotBeAppliedException()
         }
     }
 
-    private fun getConvergenceCondition(): (xk: Double, xk_next: Double) -> Boolean =
-        if (q > 0.5)
-            fun(xk: Double, xk_next: Double) = abs(xk - xk_next) > accuracy
+    private fun getConvergenceCondition(): (dif: Double) -> Boolean =
+        if (q <= 0.5)
+            fun(dif: Double) = abs(dif) > accuracy
         else
-            fun(xk: Double, xk_next: Double) = abs(xk - xk_next) >= accuracy * (1 - q) / q
+            fun(dif: Double) = abs(dif) >= accuracy * (1 - q) / q
 
     private fun addToTable(
         step: Int,
@@ -90,7 +104,7 @@ class SimpleIterationsMethod(
         table.add(arrayOf(step.toString(), xk.toString(), fxk.toString(), xk_next.toString(), xk_next.toString(), dif.toString()))
 
     private fun addToSolutions(xk: Double, fxk: Double, dif: Double) =
-        (abs(fxk) <= accuracy || dif <= accuracy) && !solutions.contains(xk) && solutions.add(xk)
+        (abs(fxk) <= accuracy || !getConvergenceCondition()(dif)) && !solutions.contains(xk) && solutions.add(xk)
 
     override fun getTable(): ArrayList<Array<String>> = table
 

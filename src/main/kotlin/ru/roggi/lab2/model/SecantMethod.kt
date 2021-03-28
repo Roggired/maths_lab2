@@ -51,13 +51,50 @@ class SecantMethod(
 
 
     private fun validateMethodCanBeApplied() {
-        val leftFSign = equation.evaluate(leftBound).sign
-        val rightFSign = equation.evaluate(rightBound).sign
-        val leftSign = leftFSign * equation.evaluateSecondDerivative(leftBound).sign
-        val rightSign = rightFSign * equation.evaluateSecondDerivative(rightBound).sign
+        val leftFValue = equation.evaluate(leftBound)
+        val leftFSign = leftFValue.sign
+        validationInfoBuilder.append(System.lineSeparator())
+        validationInfoBuilder.append(presentFunctionValue(leftFSign, leftBound, leftFValue))
+        validationInfoBuilder.append(System.lineSeparator())
+
+        val leftFSDValue = equation.evaluateSecondDerivative(leftBound)
+        val leftFSDSign = leftFSDValue.sign
+        validationInfoBuilder.append(presentFunctionSecondDerivativeValue(leftFSDSign, leftBound, leftFSDValue))
+        validationInfoBuilder.append(System.lineSeparator())
+        validationInfoBuilder.append(System.lineSeparator())
+
+        val leftSign = leftFSign * leftFSDSign
+        validationInfoBuilder.append(presentFMultiplyFSD(leftSign, leftBound))
+        validationInfoBuilder.append(System.lineSeparator())
+        validationInfoBuilder.append(System.lineSeparator())
+
+        val rightFValue = equation.evaluate(rightBound)
+        val rightFSign = rightFValue.sign
+        validationInfoBuilder.append(presentFunctionValue(rightFSign, rightBound, rightFValue))
+        validationInfoBuilder.append(System.lineSeparator())
+
+        val rightFSDValue = equation.evaluateSecondDerivative(rightBound)
+        val rightFSDSign = rightFSDValue.sign
+        validationInfoBuilder.append(presentFunctionSecondDerivativeValue(rightFSDSign, rightBound, rightFSDValue))
+        validationInfoBuilder.append(System.lineSeparator())
+        validationInfoBuilder.append(System.lineSeparator())
+
+        val rightSign = rightFSign * rightFSDSign
+        validationInfoBuilder.append(presentFMultiplyFSD(rightSign, rightBound))
+        validationInfoBuilder.append(System.lineSeparator())
+        validationInfoBuilder.append(System.lineSeparator())
 
         if (leftSign < 0 && rightSign < 0) {
             throw MethodCannotBeAppliedException()
+        }
+    }
+
+    private fun presentFMultiplyFSD(sign: Double, x: Double): String {
+        val format = getFormatBasedOnAccuracy(accuracy)
+        return when(sign) {
+            -1.0 -> "f($format) * f''($format) < 0".format(x, x)
+            0.0 -> "f($format) * f''($format) = 0".format(x, x)
+            else -> "f($format) * f''($format) > 0".format(x, x)
         }
     }
 
